@@ -1,0 +1,46 @@
+body {
+    border: 2px red solid;
+    background-color: rgb(151, 151, 151);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#calculator {
+    border: 2px red solid;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    width: 400px;
+    height: 500px;
+}
+
+#display {
+    border: 2px rgb(12, 145, 0) solid;
+    padding: 20px;
+    height: 50px;
+    margin-bottom: 20px;
+}
+
+#input {
+    font-size: 50px;
+    text-align: right;
+}
+
+#buttons {
+    border: 2px blue solid;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    flex: 1 1 auto;
+    gap: 10px;
+}
+
+#buttons div {
+    border: 1px solid slategrey;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
