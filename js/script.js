@@ -1,3 +1,76 @@
+let firstOperand = "";
+let lastOperand = "";
+let operator = "";
+let currentResult = 0;
+
+const input = document.querySelector("#input");
+const result = document.querySelector("#result");
+const numberButtons = Array.from(document.querySelectorAll(".number"));
+const operatorButtons = Array.from(document.querySelectorAll(".operator"));
+const equalsButton = document.querySelector("#equals");
+const allClearButton = document.querySelector("#allClear");
+
+numberButtons.forEach(button => {
+    button.onclick = (e) => {
+        updateOperand(e);
+    }
+});
+operatorButtons.forEach(button => {
+    button.onclick = (e) => {
+        updateOperator(e);
+    }
+});
+equalsButton.onclick = () => {
+    evaluate();
+};
+allClearButton.onclick = () => {
+    clear();
+};
+
+
+function updateOperand(e) {
+    if (operator === "") {
+        if (firstOperand === "0") {
+            firstOperand = e.target.textContent;
+        } else {
+            firstOperand += e.target.textContent;
+        }
+    } else if (operator !== "") {
+        if (lastOperand === "0") {
+            lastOperand = e.target.textContent;
+        } else {
+            lastOperand += e.target.textContent;
+        }
+    }
+    updateDisplay(); 
+}
+
+function updateOperator(e) {
+    // should not enter operator when there's no first operand
+    if (firstOperand === "") {
+        return;
+    }
+
+    if (lastOperand === "") {
+        operator = e.target.textContent;
+    } else if (lastOperand !== "") {
+        if (lastOperand === "0") {
+            alertDivisionByZero();
+            return;
+        }
+        operate(+firstOperand, +lastOperand, operator);
+        firstOperand = currentResult;
+        lastOperand = "";
+        operator = e.target.textContent;
+    }
+    updateDisplay();
+}
+
+function alertDivisionByZero() {
+    alert("Oops. You cannot divide by zero :T");
+    clear();
+}
+
 function add(a, b) {
     return a + b;
 }
@@ -15,62 +88,24 @@ function divide(a, b) {
 }
 
 function operate(a, b, operator) {
-    let result;
     switch (operator) {
         case "+":
-            result = add(a, b);
+            currentResult = add(a, b);
             break;
         case "-":
-            result = subtract(a, b);
+            currentResult = subtract(a, b);
             break;
         case "x":
-            result = multiply(a, b);
+            currentResult = multiply(a, b);
             break;
         case "/":
-            result = divide(a, b);
+            currentResult = divide(a, b);
     }
-    return Math.round(result * 1000) / 1000;
-}
-
-function updateEquation(e) {
-    const targetClassList = Array.from(e.target.classList);
-    if (targetClassList.includes("number")) {
-        if (operator === "") {
-            if (firstOperand === "0") {
-                firstOperand = e.target.textContent;
-            } else {
-                firstOperand += e.target.textContent;
-            }
-        } else if (operator !== "") {
-            if (lastOperand === "0") {
-                lastOperand = e.target.textContent;
-            } else {
-                lastOperand += e.target.textContent;
-            }
-        }
-    } else if (targetClassList.includes("operator")) {
-        if (firstOperand === "") {
-            return;
-        }
-        if (lastOperand === "") {
-            operator = e.target.textContent;
-        } else if (lastOperand !== "") {
-            if (lastOperand === "0") {
-                alertDivideByZero();
-                return;
-            }
-            currentResult = operate(+firstOperand, +lastOperand, operator);
-            firstOperand = currentResult;
-            lastOperand = "";
-            operator = e.target.textContent;
-        }
-    }
-    currentInput = firstOperand + operator + lastOperand;
-    updateDisplay();
+    currentResult = Math.round(currentResult * 1000) / 1000;
 }
 
 function updateDisplay() {
-    input.textContent = currentInput;
+    input.textContent = firstOperand + operator + lastOperand;
     result.textContent = currentResult;
 }
 
@@ -78,57 +113,24 @@ function clear() {
     firstOperand = "";
     lastOperand = "";
     operator = "";
-    currentInput = "";
     currentResult = 0;
+    updateDisplay();
 }
 
 function evaluate() {
     if (lastOperand === "0") {
-        alertDivideByZero();
+        alertDivisionByZero();
         return;
     }
+
     if (firstOperand === "" || operator === "" || lastOperand ==="") {
         return;
     }
-    currentResult = operate(+firstOperand, +lastOperand, operator);
+    
+    operate(+firstOperand, +lastOperand, operator);
     firstOperand = currentResult;
     lastOperand = "";
     operator = "";
-}
 
-function alertDivideByZero() {
-    alert("You cannot divide by zero :/");
-    clear();
     updateDisplay();
 }
-
-
-let firstOperand = "";
-let lastOperand = "";
-let operator = "";
-
-let currentInput = "";
-let currentResult = 0;
-
-const input = document.querySelector("#input");
-const result = document.querySelector("#result");
-
-const numberButtons = Array.from(document.querySelectorAll(".number"));
-const operatorButtons = Array.from(document.querySelectorAll(".operator"));
-[...numberButtons, ...operatorButtons].forEach(button => {
-    button.onclick = (e) => {
-        updateEquation(e);
-    }
-});
-
-const equals = document.querySelector("#equals");
-equals.onclick = () => {
-    evaluate();
-    updateDisplay();
-};
-
-const allClear = document.querySelector("#allClear");
-allClear.onclick = () => {
-    clear();
-    updateDisplay();
-};
