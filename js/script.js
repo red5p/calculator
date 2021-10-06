@@ -32,6 +32,10 @@ function operate(operator, a, b) {
 
 function updateCurrentInput(e) {
     const input = e.target.textContent;
+    // if is number and operator is empty, append to first operand
+    // if is operator and last operand is empty, add to operator
+    // if last operand is not empty, calculate and display result
+
     currentInput += input;
 }
 
@@ -41,6 +45,10 @@ function updateDisplay() {
 
 
 let currentInput = "";
+
+let firstOperand = "";
+let lastOperand = "";
+let operator = "";
 
 const input = document.querySelector("#input");
 
