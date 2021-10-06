@@ -49,6 +49,9 @@ function updateEquation(e) {
             }
         }
     } else if (targetClassList.includes("operator")) {
+        if (firstOperand === "") {
+            return;
+        }
         if (lastOperand === "") {
             operator = e.target.textContent;
         } else if (lastOperand !== "") {

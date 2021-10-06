@@ -13,22 +13,24 @@ body {
     flex-direction: column;
     padding: 20px;
     width: 400px;
-    height: 500px;
+    min-height: 500px;
 }
 
 #screen {
     border: 2px rgb(12, 145, 0) solid;
     padding: 20px;
-    height: 60px;
+    min-height: 60px;
     margin-bottom: 20px;
     display: flex;
     flex-direction: column;
 }
 
 #input {
-    height: 30px;
+    max-width: 100%;
+    min-height: 30px;
     font-size: 30px;
     align-self: flex-start;
+    word-wrap: break-word;
 }
 
 #result {
