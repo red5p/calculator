@@ -14,48 +14,73 @@ function divide(a, b) {
     return a / b;
 }
 
-function operate(operator, a, b) {
+function operate(a, b, operator) {
     switch (operator) {
-        case '+':
-            add(a, b); //? where should the return value go?
-            break;
-        case '-':
-            subtract(a, b);
-            break;
-        case '*':
-            multiply(a, b);
-            break;
-        case '/':
-            divide(a, b);
+        case "+":
+            return add(a, b);
+        case "-":
+            return subtract(a, b);
+        case "x":
+            return multiply(a, b);
+        case "/":
+            return divide(a, b);
     }
 }
 
 function updateCurrentInput(e) {
-    const input = e.target.textContent;
     // if is number and operator is empty, append to first operand
     // if is operator and last operand is empty, add to operator
-    // if last operand is not empty, calculate and display result
-
-    currentInput += input;
+    // if is a number and operator is not empty, append to last operand
+    // !if it is = and operand 2 is not empty, calculate result, make result the first operand
+    // !if it is operator(not equals) and operand 2 not empty, calculate result and add opeartor
+    const targetClassList = Array.from(e.target.classList);
+    if (targetClassList.includes("number") && operator === "") {
+        firstOperand += e.target.textContent;
+    } else if (targetClassList.includes("operator") && lastOperand === "") {
+        operator = e.target.textContent;
+    } else if (targetClassList.includes("number") && operator !== "") {
+        lastOperand += e.target.textContent;
+    } else if (e.target.id === "equals" && lastOperand !== "") {
+        const result = operate(+firstOperand, +lastOperand, operator);
+        firstOperand = result.toString();
+        lastOperand = "";
+        operator = "";
+    } else if (targetClassList.includes("operator") && lastOperand !== "") {
+        const result = operate(+firstOperand, +lastOperand, operator);
+        firstOperand = result.toString();
+        lastOperand = "";
+        operator = operator;
+    }
 }
 
 function updateDisplay() {
-    input.textContent = currentInput;
+    display.textContent = firstOperand + operator + lastOperand;
 }
 
+function clear() {
+    firstOperand = "";
+    lastOperand = "";
+    operator = "";
+}
 
-let currentInput = "";
 
 let firstOperand = "";
 let lastOperand = "";
 let operator = "";
 
-const input = document.querySelector("#input");
+const display = document.querySelector("#display");
 
-const numberButtons = document.querySelectorAll("#buttons .number");
-numberButtons.forEach(button => {
+const numberButtons = Array.from(document.querySelectorAll(".number"));
+const operatorButtons = Array.from(document.querySelectorAll(".operator"));
+[...numberButtons, ...operatorButtons].forEach(button => {
     button.onclick = (e) => {
         updateCurrentInput(e);
         updateDisplay();
     }
 });
+
+const allClear = document.querySelector("#allClear");
+allClear.onclick = () => {
+    clear();
+    updateDisplay();
+};
