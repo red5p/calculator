@@ -1,6 +1,5 @@
 body {
     border: 2px red solid;
-    background-color: rgb(151, 151, 151);
     height: 100vh;
     display: flex;
     justify-content: center;
@@ -8,50 +7,70 @@ body {
 }
 
 #calculator {
-    border: 2px red solid;
+    background-color: rgb(122, 122, 122);
+    border-radius: 10px;
     display: flex;
     flex-direction: column;
     padding: 20px;
     width: 400px;
     min-height: 500px;
+    box-shadow: 10px 20px 10px rgb(190, 190, 190);
+    gap: 20px;
+    font-weight: bold;
+
 }
 
 #screen {
-    border: 2px rgb(12, 145, 0) solid;
+    background-color: rgb(255, 255, 255);
     padding: 20px;
-    min-height: 60px;
-    margin-bottom: 20px;
+    min-height: 100px;
     display: flex;
     flex-direction: column;
 }
 
 #input {
     max-width: 100%;
-    min-height: 30px;
-    font-size: 30px;
+    min-height: 40px;
+    font-size: 40px;
     align-self: flex-start;
     word-wrap: break-word;
 }
 
 #result {
-    height: 30px;
-    font-size: 30px;
+    min-height: 60px;
+    max-width: 100%;
+    font-size: 60px;
     align-self: flex-end;
+    word-wrap: break-word;
 }
 
 #buttons {
-    border: 2px blue solid;
+    box-sizing: border-box;
+    border-radius: 10px;
+    background-color: rgb(153, 153, 153);
     padding: 20px;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     flex: 1 1 auto;
+    height: 400px;
+    width: 400px;
     gap: 10px;
 }
 
-#buttons div {
-    border: 1px solid slategrey;
+.btn {
+    border-radius: 50%;
+    background-color: rgb(235, 177, 19);
     display: flex;
     justify-content: center;
     align-items: center;
     cursor: pointer;
+    transition: 100ms;
+    box-shadow: 5px 5px 0px rgb(138, 138, 138); 
+}
+
+.btn:hover {
+    background-color: rgb(255, 255, 255);
+    transform: translateY(5px);
+    box-shadow: 0px 0px 0px rgb(138, 138, 138); 
+
 }
