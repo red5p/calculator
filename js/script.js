@@ -27,38 +27,55 @@ function operate(a, b, operator) {
     }
 }
 
-function updateCurrentInput(e) {
-    // if is number and operator is empty, append to first operand
-    // if is operator and last operand is empty, add to operator
-    // if is a number and operator is not empty, append to last operand
-    // !if it is = and operand 2 is not empty, calculate result, make result the first operand
-    // !if it is operator(not equals) and operand 2 not empty, calculate result and add opeartor
+function updateEquation(e) {
     const targetClassList = Array.from(e.target.classList);
-    if (targetClassList.includes("number") && operator === "") {
-        firstOperand += e.target.textContent;
-    } else if (targetClassList.includes("operator") && lastOperand === "") {
-        operator = e.target.textContent;
-    } else if (targetClassList.includes("number") && operator !== "") {
-        lastOperand += e.target.textContent;
-    } else if (e.target.id === "equals" && lastOperand !== "") {
-        const result = operate(+firstOperand, +lastOperand, operator);
-        firstOperand = result.toString();
-        lastOperand = "";
-        operator = "";
-    } else if (targetClassList.includes("operator") && lastOperand !== "") {
-        const result = operate(+firstOperand, +lastOperand, operator);
-        firstOperand = result.toString();
-        lastOperand = "";
-        operator = operator;
+    if (targetClassList.includes("number")) {
+        if (operator === "") {
+            if (firstOperand === "0") {
+                firstOperand = e.target.textContent;
+            } else {
+                firstOperand += e.target.textContent;
+            }
+        } else if (operator !== "") {
+            if (lastOperand === "0") {
+                lastOperand = e.target.textContent;
+            } else {
+                lastOperand += e.target.textContent;
+            }
+        }
+    } else if (targetClassList.includes("operator")) {
+        if (lastOperand === "") {
+            operator = e.target.textContent;
+        } else if (lastOperand !== "") {
+            currentResult = operate(+firstOperand, +lastOperand, operator);
+            firstOperand = currentResult;
+            lastOperand = "";
+            operator = e.target.textContent;
+        }
     }
+    currentInput = firstOperand + operator + lastOperand;
+    updateDisplay();
 }
 
 function updateDisplay() {
-    display.textContent = firstOperand + operator + lastOperand;
+    input.textContent = currentInput;
+    result.textContent = currentResult;
 }
 
 function clear() {
     firstOperand = "";
+    lastOperand = "";
+    operator = "";
+    currentInput = "";
+    currentResult = 0;
+}
+
+function evaluate() {
+    if (firstOperand === "" || operator === "" || lastOperand ==="") {
+        return;
+    }
+    currentResult = operate(+firstOperand, +lastOperand, operator);
+    firstOperand = currentResult;
     lastOperand = "";
     operator = "";
 }
@@ -68,16 +85,25 @@ let firstOperand = "";
 let lastOperand = "";
 let operator = "";
 
-const display = document.querySelector("#display");
+let currentInput = "";
+let currentResult = 0;
+
+const input = document.querySelector("#input");
+const result = document.querySelector("#result");
 
 const numberButtons = Array.from(document.querySelectorAll(".number"));
 const operatorButtons = Array.from(document.querySelectorAll(".operator"));
 [...numberButtons, ...operatorButtons].forEach(button => {
     button.onclick = (e) => {
-        updateCurrentInput(e);
-        updateDisplay();
+        updateEquation(e);
     }
 });
+
+const equals = document.querySelector("#equals");
+equals.onclick = () => {
+    evaluate();
+    updateDisplay();
+};
 
 const allClear = document.querySelector("#allClear");
 allClear.onclick = () => {
