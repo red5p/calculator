@@ -15,16 +15,21 @@ function divide(a, b) {
 }
 
 function operate(a, b, operator) {
+    let result;
     switch (operator) {
         case "+":
-            return add(a, b);
+            result = add(a, b);
+            break;
         case "-":
-            return subtract(a, b);
+            result = subtract(a, b);
+            break;
         case "x":
-            return multiply(a, b);
+            result = multiply(a, b);
+            break;
         case "/":
-            return divide(a, b);
+            result = divide(a, b);
     }
+    return Math.round(result * 1000) / 1000;
 }
 
 function updateEquation(e) {
