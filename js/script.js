@@ -95,10 +95,10 @@ function operate(a, b, operator) {
         case "-":
             currentResult = subtract(a, b);
             break;
-        case "x":
+        case "×":
             currentResult = multiply(a, b);
             break;
-        case "/":
+        case "÷":
             currentResult = divide(a, b);
     }
     currentResult = Math.round(currentResult * 1000) / 1000;
