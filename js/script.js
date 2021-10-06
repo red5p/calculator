@@ -1,12 +1,12 @@
-let firstOperand = "";
-let lastOperand = "";
+let leftOperand = "";
+let rightOperand = "";
 let operator = "";
 let currentResult = 0;
 
 const input = document.querySelector("#input");
 const result = document.querySelector("#result");
-const numberButtons = Array.from(document.querySelectorAll(".number"));
-const operatorButtons = Array.from(document.querySelectorAll(".operator"));
+const numberButtons = document.querySelectorAll(".number");
+const operatorButtons = document.querySelectorAll(".operator");
 const equalsButton = document.querySelector("#equals");
 const allClearButton = document.querySelector("#allClear");
 
@@ -29,17 +29,17 @@ allClearButton.onclick = () => {
 
 
 function updateOperand(e) {
-    if (operator === "") {
-        if (firstOperand === "0") {
-            firstOperand = e.target.textContent;
+    if (operator === "") { // when there is no operator, update left operand
+        if (leftOperand === "0") {
+            leftOperand = e.target.textContent;
         } else {
-            firstOperand += e.target.textContent;
+            leftOperand += e.target.textContent;
         }
-    } else if (operator !== "") {
-        if (lastOperand === "0") {
-            lastOperand = e.target.textContent;
+    } else if (operator !== "") { // when there is alreay an operator, update right operand
+        if (rightOperand === "0") {
+            rightOperand = e.target.textContent;
         } else {
-            lastOperand += e.target.textContent;
+            rightOperand += e.target.textContent;
         }
     }
     updateDisplay(); 
@@ -47,21 +47,21 @@ function updateOperand(e) {
 
 function updateOperator(e) {
     // should not enter operator when there's no first operand
-    if (firstOperand === "") {
+    if (leftOperand === "") {
         return;
     }
 
-    if (lastOperand === "") {
+    if (rightOperand === "") { // can update operator if right operand not entened
         operator = e.target.textContent;
-    } else if (lastOperand !== "") {
-        if (lastOperand === "0") {
+    } else if (rightOperand !== "") { // if there's a right operand, result will be evaluated
+        if (rightOperand === "0") {
             alertDivisionByZero();
             return;
         }
-        operate(+firstOperand, +lastOperand, operator);
-        firstOperand = currentResult;
-        lastOperand = "";
-        operator = e.target.textContent;
+        operate(+leftOperand, +rightOperand, operator);
+        leftOperand = currentResult; // make left operand the result just got
+        rightOperand = "";
+        operator = e.target.textContent; // set operator to the one just entered
     }
     updateDisplay();
 }
@@ -105,31 +105,32 @@ function operate(a, b, operator) {
 }
 
 function updateDisplay() {
-    input.textContent = firstOperand + operator + lastOperand;
+    input.textContent = leftOperand + operator + rightOperand;
     result.textContent = currentResult;
 }
 
 function clear() {
-    firstOperand = "";
-    lastOperand = "";
+    leftOperand = "";
+    rightOperand = "";
     operator = "";
     currentResult = 0;
     updateDisplay();
 }
 
 function evaluate() {
-    if (lastOperand === "0") {
+    if (rightOperand === "0") {
         alertDivisionByZero();
         return;
     }
 
-    if (firstOperand === "" || operator === "" || lastOperand ==="") {
+    // evaluation is not allowed when the equation is now complete
+    if (leftOperand === "" || operator === "" || rightOperand ==="") {
         return;
     }
     
-    operate(+firstOperand, +lastOperand, operator);
-    firstOperand = currentResult;
-    lastOperand = "";
+    operate(+leftOperand, +rightOperand, operator);
+    leftOperand = currentResult;
+    rightOperand = "";
     operator = "";
 
     updateDisplay();
