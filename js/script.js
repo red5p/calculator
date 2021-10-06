@@ -52,6 +52,10 @@ function updateEquation(e) {
         if (lastOperand === "") {
             operator = e.target.textContent;
         } else if (lastOperand !== "") {
+            if (lastOperand === "0") {
+                alertDivideByZero();
+                return;
+            }
             currentResult = operate(+firstOperand, +lastOperand, operator);
             firstOperand = currentResult;
             lastOperand = "";
@@ -76,6 +80,10 @@ function clear() {
 }
 
 function evaluate() {
+    if (lastOperand === "0") {
+        alertDivideByZero();
+        return;
+    }
     if (firstOperand === "" || operator === "" || lastOperand ==="") {
         return;
     }
@@ -83,6 +91,12 @@ function evaluate() {
     firstOperand = currentResult;
     lastOperand = "";
     operator = "";
+}
+
+function alertDivideByZero() {
+    alert("You cannot divide by zero :/");
+    clear();
+    updateDisplay();
 }
 
 
